@@ -20,7 +20,7 @@ void process_frame(IplImage *input, IplImage *output)
 {
 	Mat incoming_frame(input);
 	Mat gray;
-	cvtColor(incoming_frame, gray, CV_RGB2GRAY);
+	cvtColor(gray, incoming_frame, CV_RGB2GRAY);
 
 	output = gray.clone();
 	//memcpy(output->imageData,input->imageData,output->imageSize);
