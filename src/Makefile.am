@@ -14,7 +14,7 @@ plugin_LTLIBRARIES = libgstOpticalQuad.la
 ##############################################################################
 
 # sources used to compile this plug-in
-libgstOpticalQuad_la_SOURCES = gstopticalquad.cpp gstopticalquad.h
+libgstOpticalQuad_la_SOURCES = gstOpticalProcessor.cc gstopticalquad.c gstopticalquad.h
 
 # compiler and linker flags used to compile this plugin, set in configure.ac
 libgstOpticalQuad_la_CFLAGS = $(GST_CFLAGS)
@@ -24,6 +24,9 @@ libgstOpticalQuad_la_LIBTOOLFLAGS = --tag=disable-static
 
 libgstOpticalQuad_la_CFLAGS += `pkg-config opencv --cflags`
 libgstOpticalQuad_la_LDFLAGS += `pkg-config opencv --libs`
+
+libgstOpticalQuad_la_CPPFLAGS = $(GST_CFLAGS)
+
 
 # headers we need but don't want installed
 noinst_HEADERS = gstopticalquad.h

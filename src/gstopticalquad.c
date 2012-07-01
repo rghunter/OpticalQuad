@@ -61,7 +61,7 @@
 #endif
 
 #include <gst/gst.h>
-#include <opencv2/opencv.hpp>
+
 
 #include "gstopticalquad.h"
 
@@ -210,8 +210,17 @@ gst_optical_quad_set_caps (GstPad * pad, GstCaps * caps)
 {
   GstOpticalQuad *filter;
   GstPad *otherpad;
+  gint width, height;
+  GstStructure *structure;
 
   filter = GST_OPTICALQUAD (gst_pad_get_parent (pad));
+  structure = gst_caps_get_structure(caps,0);
+  gst_structure_get_int(structure,"width",&width);
+  gst_structure_get_int(structure,"height",&height);
+
+  filter->input = cvCreateImage(cvSize(width,height),IPL_DEPTH_8U,3);
+  filter->output = cvCreateImage(cvSize(width,height),IPL_DEPTH_8U,3);
+
   otherpad = (pad == filter->srcpad) ? filter->sinkpad : filter->srcpad;
   gst_object_unref (filter);
 
@@ -225,14 +234,24 @@ static GstFlowReturn
 gst_optical_quad_chain (GstPad * pad, GstBuffer * buf)
 {
   GstOpticalQuad *filter;
+  GstBuffer *outbuf;
 
   filter = GST_OPTICALQUAD (GST_OBJECT_PARENT (pad));
+
+  filter->input->imageData = (char *)GST_BUFFER_DATA(buf);
+
+  process_frame(&filter->input,&filter->output);
+
+  outbuf = gst_buffer_new_and_alloc(filter->output->imageSize);
+  gst_buffer_copy_metadata(outbuf,buf,GST_BUFFER_COPY_ALL);
+  memcpy(GST_BUFFER_DATA(outbuf),filter->output->imageData,GST_BUFFER_SIZE(outbuf));
 
   if (filter->silent == FALSE)
     g_print ("I'm plugged, therefore I'm in.\n");
 
   /* just push out the incoming buffer without touching it */
-  return gst_pad_push (filter->srcpad, buf);
+  gst_buffer_unref(buf);
+  return gst_pad_push (filter->srcpad, outbuf);
 }
 
 

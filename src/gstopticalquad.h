@@ -47,6 +47,12 @@
 #define __GST_OPTICALQUAD_H__
 
 #include <gst/gst.h>
+#include <opencv/cv.h>
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 G_BEGIN_DECLS
 
@@ -71,6 +77,8 @@ struct _GstOpticalQuad
 
   GstPad *sinkpad, *srcpad;
 
+  IplImage *input, *output;
+
   gboolean silent;
 };
 
@@ -82,5 +90,17 @@ struct _GstOpticalQuadClass
 GType gst_optical_quad_get_type (void);
 
 G_END_DECLS
+
+//C++ linkage
+
+void init_frameprocessor(void);
+void process_frame(IplImage *input, IplImage *output);
+void cleanup_frameprocessor(void);
+
+//end C++ linkage
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __GST_OPTICALQUAD_H__ */
