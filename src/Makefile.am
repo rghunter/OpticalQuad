@@ -18,7 +18,7 @@ libgstOpticalQuad_la_SOURCES = gstOpticalProcessor.cc gstopticalquad.c gstoptica
 
 # compiler and linker flags used to compile this plugin, set in configure.ac
 libgstOpticalQuad_la_CFLAGS = $(GST_CFLAGS) $(OPENCV_CFLAGS)
-libgstOpticalQuad_la_LIBADD = $(GST_LIBS) $(OPENCV_LIBS) -lopencv_highgui -lopencv_core
+libgstOpticalQuad_la_LIBADD = $(GST_LIBS) $(OPENCV_LIBS) -lopencv_highgui -lopencv_core -lopencv_imgproc
 #^ FUCK YA STACKOVERFLOW
 libgstOpticalQuad_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
 #libgstOpticalQuad_la_LIBTOOLFLAGS = --tag=disable-static
