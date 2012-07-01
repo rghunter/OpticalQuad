@@ -250,7 +250,7 @@ gst_optical_quad_chain (GstPad * pad, GstBuffer * buf)
   //  g_print ("I'm plugged, therefore I'm in.\n");
 
   /* just push out the incoming buffer without touching it */
-  gst_buffer_unref(buf);
+  //gst_buffer_unref(buf);
   return gst_pad_push (filter->srcpad, buf);
 }
 
