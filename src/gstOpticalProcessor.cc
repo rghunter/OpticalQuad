@@ -19,7 +19,7 @@ void init_frameprocessor(void)
 void process_frame(IplImage *input, IplImage *output)
 {
 	Mat incoming_frame(input);
-	output = input;
+	memcpy(output->imageData,input->imageData,input->imageSize);
 	return;
 }
 void cleanup_frameprocessor(void)

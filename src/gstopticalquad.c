@@ -246,8 +246,8 @@ gst_optical_quad_chain (GstPad * pad, GstBuffer * buf)
   gst_buffer_copy_metadata(outbuf,buf,GST_BUFFER_COPY_ALL);
   memcpy(GST_BUFFER_DATA(outbuf),filter->output->imageData,GST_BUFFER_SIZE(outbuf));
 
-  if (filter->silent == FALSE)
-    g_print ("I'm plugged, therefore I'm in.\n");
+ // if (filter->silent == FALSE)
+  //  g_print ("I'm plugged, therefore I'm in.\n");
 
   /* just push out the incoming buffer without touching it */
   gst_buffer_unref(buf);
