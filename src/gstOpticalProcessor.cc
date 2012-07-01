@@ -18,7 +18,7 @@ void init_frameprocessor(void)
 }
 void process_frame(IplImage *input, IplImage *output)
 {
-	//Mat incoming_frame(input);
+	Mat incoming_frame(input);
 	output = input;
 	return;
 }

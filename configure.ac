@@ -60,6 +60,15 @@ PKG_CHECK_MODULES(GST, [
   ])
 ])
 
+PKG_CHECK_MODULES(OPENCV,opencv,HAVE_OPENCV=yes,HAVE_OPENCV=no)
+
+AC_SUBST(OPENCV_CFLAGS)
+AC_SUBST(OPENCV_LIBS)
+
+if test "x$HAVE_OPENCV" = "xno"; then
+	AC_MSG_ERROR(OpenCV Libraries could not be found)
+fi
+
 dnl check if compiler understands -Wall (if yes, add -Wall to GST_CFLAGS)
 AC_MSG_CHECKING([to see if compiler understands -Wall])
 save_CFLAGS="$CFLAGS"
