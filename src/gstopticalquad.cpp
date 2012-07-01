@@ -61,6 +61,7 @@
 #endif
 
 #include <gst/gst.h>
+#include <opencv2/opencv.hpp>
 
 #include "gstopticalquad.h"
 
@@ -87,17 +88,16 @@ enum
 static GstStaticPadTemplate sink_factory = GST_STATIC_PAD_TEMPLATE ("sink",
     GST_PAD_SINK,
     GST_PAD_ALWAYS,
-    GST_STATIC_CAPS ("ANY")
+    GST_STATIC_CAPS ("video/x-raw-rgb")
     );
 
 static GstStaticPadTemplate src_factory = GST_STATIC_PAD_TEMPLATE ("src",
     GST_PAD_SRC,
     GST_PAD_ALWAYS,
-    GST_STATIC_CAPS ("ANY")
+    GST_STATIC_CAPS ("video/x-raw-rgb")
     );
 
-GST_BOILERPLATE (GstOpticalQuad, gst_optical_quad, GstElement,
-    GST_TYPE_ELEMENT);
+GST_BOILERPLATE(GstOpticalQuad, gst_optical_quad, GstElement,GST_TYPE_ELEMENT);
 
 static void gst_optical_quad_set_property (GObject * object, guint prop_id,
     const GValue * value, GParamSpec * pspec);
@@ -116,9 +116,9 @@ gst_optical_quad_base_init (gpointer gclass)
 
   gst_element_class_set_details_simple(element_class,
     "OpticalQuad",
-    "FIXME:Generic",
-    "FIXME:Generic Template Element",
-    " <<user@hostname.org>>");
+    "Filter/Effect/Video",
+    "Performs image correction and Lucas Kanade Optical Flow",
+    "Ryan Hunter <rghunter@bu.edu>");
 
   gst_element_class_add_pad_template (element_class,
       gst_static_pad_template_get (&src_factory));
@@ -273,7 +273,7 @@ GST_PLUGIN_DEFINE (
     "opticalquad",
     "Template opticalquad",
     opticalquad_init,
-    VERSION,
+    "VERSION",
     "LGPL",
     "GStreamer",
     "http://gstreamer.net/"
