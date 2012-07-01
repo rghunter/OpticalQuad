@@ -19,7 +19,11 @@ void init_frameprocessor(void)
 void process_frame(IplImage *input, IplImage *output)
 {
 	Mat incoming_frame(input);
-	memcpy(output->imageData,input->imageData,output->imageSize);
+	Mat gray;
+	cvtColor(incoming_frame, gray, CV_RGB2GRAY);
+
+	output = gray.clone();
+	//memcpy(output->imageData,input->imageData,output->imageSize);
 	return;
 }
 void cleanup_frameprocessor(void)
