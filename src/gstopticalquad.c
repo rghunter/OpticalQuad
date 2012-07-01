@@ -240,7 +240,7 @@ gst_optical_quad_chain (GstPad * pad, GstBuffer * buf)
 
   filter->input->imageData = (char *)GST_BUFFER_DATA(buf);
 
-  process_frame(&filter->input,&filter->output);
+  process_frame(filter->input,filter->output);
 
   outbuf = gst_buffer_new_and_alloc(filter->output->imageSize);
   gst_buffer_copy_metadata(outbuf,buf,GST_BUFFER_COPY_ALL);
