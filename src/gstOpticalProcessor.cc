@@ -10,55 +10,61 @@
 #include <iostream>
 
 #define WINDOW_SIZE 20
+#define MAX_CORNERS 100
 #define HISTORY 2
 using namespace std;
 using namespace cv;
 
-deque<Mat> frame_buffer;
-
+deque<Mat> *frame_buffer;
+Mat *outgoing_frame, *frame_gray, *status, *errors;
+Mat corners[2];
+int corner_count;
+TermCriteria subPixCriteria;
+Size subPixWindowSize;
 
 
 void init_frameprocessor(void)
 {
-	frame_buffer.clear();
-
-
+	frame_buffer->clear();
+	outgoing_frame = new Mat();
+	status = new Mat();
+	frame_gray = new Mat();
+	errors = new Mat();
+	for(int i = 0; i < 2; i++)
+		corners[i] = new Mat();
+	corner_count = MAX_CORNERS;
+	subPixCriteria.epsilon = 0.3;
+	subPixCriteria.maxCount = 20;
+	subPixCriteria.type = (CV_TERMCRIT_ITER | CV_TERMCRIT_EPS);
+	subPixWindowSize = new Size(WINDOW_SIZE,WINDOW_SIZE);
+	frame_buffer = new deque<Mat>();
 }
 void process_frame(IplImage *input, IplImage *output)
 {
 	Mat incoming_frame(input);
-	Mat outgoing_frame;
-	Mat frame_gray, status, errors;
-	Mat corners[2];
-	int corner_count = 200;
-
-	Size subPixWindowSize(WINDOW_SIZE,WINDOW_SIZE);
-	TermCriteria subPixCriteria;
-	subPixCriteria.epsilon = 0.3;
-	subPixCriteria.maxCount = 20;
-	subPixCriteria.type = (CV_TERMCRIT_ITER | CV_TERMCRIT_EPS);
 
 	Size video_frame_size = incoming_frame.size();
 
 
-	cvtColor(incoming_frame,frame_gray, CV_RGB2GRAY);
+	cvtColor(incoming_frame,*frame_gray, CV_RGB2GRAY);
 
-	frame_buffer.push_front(frame_gray.clone());
+	frame_buffer->push_front(frame_gray->clone());
 
-	goodFeaturesToTrack(frame_buffer[0],corners[0],corner_count,
+	goodFeaturesToTrack(frame_buffer[0],corners[0],*corner_count,
 						0.01, //quality
 						10.0); //min seperation
 
-	cornerSubPix(frame_buffer[0],corners[0],subPixWindowSize,Size(-1,-1),subPixCriteria);
+	cornerSubPix(*frame_buffer[0],*corners[0],*subPixWindowSize,Size(-1,-1),*subPixCriteria);
 
-	if((int)frame_buffer.size() > HISTORY){
-		frame_buffer.pop_back();
+	if((int)frame_buffer->size() > HISTORY){
+		frame_buffer->pop_back();
 	}else{
 		return;
 	}
 
-	calcOpticalFlowPyrLK(frame_buffer.front(),frame_buffer.back(),corners[0],corners[1],status, errors);
+	calcOpticalFlowPyrLK(frame_buffer->front(),frame_buffer->back(),corners[0],corners[1],*status, *errors);
 
+#if 0
 	Mat vectors = corners[0] - corners[1];
 	float vel = 0;
 	float x = 0;
@@ -79,7 +85,7 @@ void process_frame(IplImage *input, IplImage *output)
 
 	Point start(video_frame_size.width/2,video_frame_size.height/2);
 	line(incoming_frame,start,Point(video_frame_size.width/2+(x*vel*10.0),video_frame_size.height/2+(y*vel*10.0)),Scalar(255,0,0),3);
-
+#endif
 
 	*output = incoming_frame;
 

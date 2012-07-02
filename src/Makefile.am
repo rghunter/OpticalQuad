@@ -16,6 +16,8 @@ plugin_LTLIBRARIES = libgstOpticalQuad.la
 # sources used to compile this plug-in
 libgstOpticalQuad_la_SOURCES = gstOpticalProcessor.cc gstopticalquad.c gstopticalquad.h
 
+#compiler optimization flags:
+GST_CFLAGS += -O3
 # compiler and linker flags used to compile this plugin, set in configure.ac
 libgstOpticalQuad_la_CFLAGS = $(GST_CFLAGS) $(OPENCV_CFLAGS)
 libgstOpticalQuad_la_LIBADD = $(GST_LIBS) $(OPENCV_LIBS) -lopencv_highgui -lopencv_core -lopencv_imgproc -lopencv_ml \
