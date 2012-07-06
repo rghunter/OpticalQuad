@@ -43,10 +43,7 @@ void process_frame(IplImage *input, IplImage *output)
 	Mat incoming_frame(input);
 	Mat status, errors;
 
-	//Size video_frame_size = incoming_frame.size();
-
-
-
+	Size video_frame_size = incoming_frame.size();
 
 	cvtColor(incoming_frame,frame_gray, CV_RGB2GRAY);
 
@@ -67,8 +64,8 @@ void process_frame(IplImage *input, IplImage *output)
 
 
 	calcOpticalFlowPyrLK(frame_buffer[0],frame_buffer[1],corners[0],corners[1],status, errors);
-#if 0
-#if 0
+
+#if 1
 	Mat vectors = corners[0] - corners[1];
 	float vel = 0;
 	float x = 0;
@@ -89,7 +86,8 @@ void process_frame(IplImage *input, IplImage *output)
 
 	Point start(video_frame_size.width/2,video_frame_size.height/2);
 	line(incoming_frame,start,Point(video_frame_size.width/2+(x*vel*10.0),video_frame_size.height/2+(y*vel*10.0)),Scalar(255,0,0),3);
-#endif
+
+	cout << y << x << endl;
 #endif
 
 	*output = incoming_frame;
