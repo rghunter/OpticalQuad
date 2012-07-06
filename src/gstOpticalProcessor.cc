@@ -27,15 +27,16 @@ void init_frameprocessor(void)
 {
 	frame_buffer.clear();
 	corner_count = MAX_CORNERS;
-	subPixCriteria.epsilon = 0.3;
-	subPixCriteria.maxCount = 20;
-	subPixCriteria.type = (CV_TERMCRIT_ITER | CV_TERMCRIT_EPS);
+
 }
 void process_frame(IplImage *input, IplImage *output)
 {
 	Mat incoming_frame(input);
 
 	subPixWindowSize = Size(WINDOW_SIZE,WINDOW_SIZE);
+	subPixCriteria.epsilon = 0.3;
+	subPixCriteria.maxCount = 20;
+	subPixCriteria.type = (CV_TERMCRIT_ITER | CV_TERMCRIT_EPS);
 
 	Size video_frame_size = incoming_frame.size();
 
