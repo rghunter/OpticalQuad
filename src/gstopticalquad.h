@@ -93,7 +93,7 @@ G_END_DECLS
 
 //C++ linkage
 
-void init_frameprocessor(void);
+void init_frameprocessor(int width, int height);
 void process_frame(IplImage *input, IplImage *output);
 void cleanup_frameprocessor(void);
 

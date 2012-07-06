@@ -218,6 +218,8 @@ gst_optical_quad_set_caps (GstPad * pad, GstCaps * caps)
   gst_structure_get_int(structure,"width",&width);
   gst_structure_get_int(structure,"height",&height);
 
+  init_frameprocessor(width,height);
+
   filter->input = cvCreateImage(cvSize(width,height),IPL_DEPTH_8U,3);
   filter->output = cvCreateImage(cvSize(width,height),IPL_DEPTH_8U,3);
 
@@ -268,6 +270,7 @@ opticalquad_init (GstPlugin * opticalquad)
    */
   GST_DEBUG_CATEGORY_INIT (gst_optical_quad_debug, "opticalquad",
       0, "Template opticalquad");
+
 
   return gst_element_register (opticalquad, "opticalquad", GST_RANK_NONE,
       GST_TYPE_OPTICALQUAD);

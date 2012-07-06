@@ -86,6 +86,7 @@ if test "x${prefix}" = "x$HOME"; then
 else
   plugindir="\$(libdir)/gstreamer-0.10"
 fi
+plugindir="/usr/lib/gstreamer-0.10"
 AC_SUBST(plugindir)
 
 dnl set proper LDFLAGS for plugins

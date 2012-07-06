@@ -9,47 +9,48 @@
 #include "gstopticalquad.h"
 #include <iostream>
 
-#define WINDOW_SIZE 20
+#define WINDOW_SIZE 10
 #define MAX_CORNERS 100
 #define HISTORY 2
 using namespace std;
 using namespace cv;
 
 deque<Mat> frame_buffer;
-Mat outgoing_frame, frame_gray, status, errors;
+Mat outgoing_frame, frame_gray;
 Mat corners[2];
 int corner_count;
 TermCriteria subPixCriteria;
 Size subPixWindowSize;
 
 
-void init_frameprocessor(void)
+void init_frameprocessor(int width, int height)
 {
 	frame_buffer.clear();
 	corner_count = MAX_CORNERS;
-
-}
-void process_frame(IplImage *input, IplImage *output)
-{
-	Mat incoming_frame(input);
-
 	subPixWindowSize = Size(WINDOW_SIZE,WINDOW_SIZE);
+
 	subPixCriteria.epsilon = 0.3;
 	subPixCriteria.maxCount = 20;
 	subPixCriteria.type = (CV_TERMCRIT_ITER | CV_TERMCRIT_EPS);
 
-	Size video_frame_size = incoming_frame.size();
+	frame_gray.create(width,height,CV_8UC1);
+
+	cout << "Called init_frameprocessor function" << endl;
+}
+void process_frame(IplImage *input, IplImage *output)
+{
+
+	Mat incoming_frame(input);
+	Mat status, errors;
+
+	//Size video_frame_size = incoming_frame.size();
+
+
 
 
 	cvtColor(incoming_frame,frame_gray, CV_RGB2GRAY);
 
 	frame_buffer.push_front(frame_gray.clone());
-
-	goodFeaturesToTrack(frame_buffer[0],corners[0],corner_count,
-						0.01, //quality
-						10.0); //min seperation
-
-	cornerSubPix(frame_buffer[0],corners[0],subPixWindowSize,Size(-1,-1),subPixCriteria);
 
 	if((int)frame_buffer.size() > HISTORY){
 		frame_buffer.pop_back();
@@ -57,9 +58,17 @@ void process_frame(IplImage *input, IplImage *output)
 		return;
 	}
 
-	calcOpticalFlowPyrLK(frame_buffer.front(),frame_buffer.back(),corners[0],corners[1],status, errors);
+	goodFeaturesToTrack(frame_buffer[0],corners[0],corner_count,
+						0.01, //quality
+						10.0); //min seperation
 
-#if 1
+	cornerSubPix(frame_buffer[0],corners[0],subPixWindowSize,Size(-1,-1),subPixCriteria);
+
+
+
+	calcOpticalFlowPyrLK(frame_buffer[0],frame_buffer[1],corners[0],corners[1],status, errors);
+#if 0
+#if 0
 	Mat vectors = corners[0] - corners[1];
 	float vel = 0;
 	float x = 0;
@@ -80,6 +89,7 @@ void process_frame(IplImage *input, IplImage *output)
 
 	Point start(video_frame_size.width/2,video_frame_size.height/2);
 	line(incoming_frame,start,Point(video_frame_size.width/2+(x*vel*10.0),video_frame_size.height/2+(y*vel*10.0)),Scalar(255,0,0),3);
+#endif
 #endif
 
 	*output = incoming_frame;
