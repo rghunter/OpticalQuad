@@ -16,7 +16,7 @@ using namespace std;
 using namespace cv;
 
 deque<Mat> frame_buffer;
-Mat outgoing_frame, frame_gray;
+Mat outgoing_frame, frame_gray, save_image;
 Mat corners[2];
 int corner_count;
 TermCriteria subPixCriteria;
@@ -87,7 +87,7 @@ void process_frame(IplImage *input, IplImage *output)
 	Point start(video_frame_size.width/2,video_frame_size.height/2);
 	line(incoming_frame,start,Point(video_frame_size.width/2+(x*vel*10.0),video_frame_size.height/2+(y*vel*10.0)),Scalar(255,0,0),3);
 
-	cout << y << x << endl;
+//	cout << y << x << endl;
 #endif
 
 	*output = incoming_frame;

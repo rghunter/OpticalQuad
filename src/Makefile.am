@@ -22,7 +22,7 @@ libgstOpticalQuad_la_SOURCES = gstOpticalProcessor.cc gstopticalquad.c gstoptica
 libgstOpticalQuad_la_CFLAGS = $(GST_CFLAGS) $(OPENCV_CFLAGS)
 libgstOpticalQuad_la_LIBADD = $(GST_LIBS) $(OPENCV_LIBS) -lopencv_highgui -lopencv_core -lopencv_imgproc -lopencv_ml \
 	-lopencv_calib3d -lopencv_contrib -lopencv_features2d -lopencv_flann -lopencv_nonfree -lopencv_objdetect -lopencv_photo \
-	-lopencv_stitching
+	-lopencv_stitching -lopencv_video
 #^ FUCK YA STACKOVERFLOW
 libgstOpticalQuad_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
 #libgstOpticalQuad_la_LIBTOOLFLAGS = --tag=disable-static
