@@ -57,7 +57,8 @@ gboolean init_frameprocessor(int width, int height)
 }
 void process_frame(IplImage *input, IplImage *output)
 {
-	SurfFeatureDetector detector(1000,8);
+	//SurfFeatureDetector detector(2000,1);
+	GridAdaptedFeatureDetector detectorGrid(new SurfFeatureDetector(2000,2), 100, 10,10);
 	FREAK extractor;
 	Mat raw_frame(input);
 	BruteForceMatcher <Hamming> matcher;
@@ -69,19 +70,20 @@ void process_frame(IplImage *input, IplImage *output)
 	if(first)
 	{
 		fixed_image = raw_frame.clone();
-		detector.detect(raw_frame,keypoint_fixed);
+		detectorGrid.detect(raw_frame,keypoint_fixed);
 		extractor.compute(raw_frame,keypoint_fixed,fixed_descriptor);
 		first = false;
 		return;
 	}
 
-	detector.detect(raw_frame,keypoint);
-	extractor.compute(raw_frame,keypoint,descriptor);
-	matcher.match(fixed_descriptor,descriptor,matches);
+	detectorGrid.detect(raw_frame,keypoint);
+	//extractor.compute(raw_frame,keypoint,descriptor);
+	//matcher.match(fixed_descriptor,descriptor,matches);
 	//drawMatches(raw_frame,keypoint_fixed,raw_frame,keypoint,matches,output_frame);
 	//imshow("output",output_frame);
+	keypoint.size();
 	drawKeypoints(raw_frame,keypoint,raw_frame,Scalar(255,0,0));
-	drawKeypoints(raw_frame,keypoint_fixed,raw_frame,Scalar(0,255,0),DrawMatchesFlags::DRAW_OVER_OUTIMG);
+//	drawKeypoints(raw_frame,keypoint_fixed,raw_frame,Scalar(0,255,0),DrawMatchesFlags::DRAW_OVER_OUTIMG);
 
 	*output = raw_frame;
 

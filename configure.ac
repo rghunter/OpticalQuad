@@ -88,7 +88,7 @@ if test "x${prefix}" = "x$HOME"; then
 else
   plugindir="\$(libdir)/gstreamer-0.10"
 fi
-plugindir="/usr/lib/gstreamer-0.10"
+plugindir="/usr/local/lib/gstreamer-0.10"
 dnlplugindir="/usr/local/Cellar/gstreamer/0.10.36/lib"
 AC_SUBST(plugindir)
 
